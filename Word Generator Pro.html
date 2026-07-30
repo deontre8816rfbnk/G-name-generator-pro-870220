@@ -1,0 +1,366 @@
+<html><head><base href="https://websim.example.com/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advanced Place Name Generator</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #121212;
+        color: #e0e0e0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 20px;
+        box-sizing: border-box;
+        transition: background-color 0.3s ease;
+    }
+
+    .container {
+        background-color: #1e1e1e;
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        max-width: 600px;
+        width: 100%;
+    }
+
+    h1 {
+        margin-bottom: 1.5rem;
+        color: #bb86fc;
+    }
+
+    .name-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .name-box {
+        background-color: #2c2c2c;
+        border-radius: 10px;
+        padding: 1rem;
+        position: relative;
+    }
+
+    .name-input {
+        width: 100%;
+        background-color: transparent;
+        border: none;
+        color: #e0e0e0;
+        font-size: 1rem;
+        text-align: center;
+        outline: none;
+    }
+
+    .save-btn {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background-color: #03dac6;
+        color: #000000;
+        border: none;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .name-box:hover .save-btn {
+        opacity: 1;
+    }
+
+    .options {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .option-btn {
+        background-color: #3700b3;
+        color: #ffffff;
+        border: none;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border-radius: 9999px;
+        outline: none;
+    }
+
+    .option-btn.active {
+        background-color: #bb86fc;
+        color: #000000;
+    }
+
+    #generate-btn {
+        background-color: #03dac6;
+        color: #000000;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border-radius: 9999px;
+        outline: none;
+        font-weight: bold;
+    }
+
+    #generate-btn:hover {
+        background-color: #018786;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(3, 218, 198, 0.3);
+    }
+
+    #generate-btn:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 4px rgba(3, 218, 198, 0.3);
+    }
+
+    #saved-count {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        font-size: 0.9rem;
+        color: #bb86fc;
+    }
+
+    #view-saved-btn {
+        margin-top: 1rem;
+        background-color: #bb86fc;
+        color: #000000;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border-radius: 9999px;
+        outline: none;
+        font-weight: bold;
+    }
+
+    #view-saved-btn:hover {
+        background-color: #9969da;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(187, 134, 252, 0.3);
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.4);
+    }
+
+    .modal-content {
+        background-color: #2c2c2c;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 600px;
+        border-radius: 10px;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #bb86fc;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    #saved-names-text {
+        width: 100%;
+        background-color: #1e1e1e;
+        color: #e0e0e0;
+        border: 1px solid #444;
+        border-radius: 5px;
+        padding: 10px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        resize: vertical;
+    }
+
+    #update-saved-names {
+        margin-top: 10px;
+        background-color: #03dac6;
+        color: #000000;
+        border: none;
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border-radius: 9999px;
+        outline: none;
+    }
+
+    #update-saved-names:hover {
+        background-color: #018786;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>Advanced Place Name Generator</h1>
+    <div class="options">
+        <button class="option-btn active" data-type="normal">Normal</button>
+        <button class="option-btn" data-type="two-part">Two-Part</button>
+        <button class="option-btn" data-type="short">Short</button>
+        <button class="option-btn" data-type="long">Long</button>
+    </div>
+    <div class="name-container">
+        <div class="name-box">
+            <input type="text" class="name-input" readonly>
+            <button class="save-btn">✓</button>
+        </div>
+        <div class="name-box">
+            <input type="text" class="name-input" readonly>
+            <button class="save-btn">✓</button>
+        </div>
+        <div class="name-box">
+            <input type="text" class="name-input" readonly>
+            <button class="save-btn">✓</button>
+        </div>
+        <div class="name-box">
+            <input type="text" class="name-input" readonly>
+            <button class="save-btn">✓</button>
+        </div>
+    </div>
+    <button id="generate-btn">Generate Names</button>
+    <button id="view-saved-btn">View Saved Names</button>
+</div>
+<div id="saved-count">Saved Names: 0</div>
+
+<div id="saved-names-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Saved Names</h2>
+        <textarea id="saved-names-text" rows="10" cols="50"></textarea>
+        <button id="update-saved-names">Update</button>
+    </div>
+</div>
+
+<script>
+    const names = ["Helide", "Adrisselle", "Droseal", "Anarial", "Diomele", "San Fei-Alderie", "Arnelfe", "Morune", "Deroule", "Thonilery", "Thoughnelle", "Ornelfe", "Meroude", "Nerande", "Nalerie", "O'yealm", "Braithwere", "fnorke", "Jerenaya", "Olenmot", "Elenma", "Orne-Quemease", "Goulde Veiro", "Siroulen", "Oraigo", "Crufealer", "Heillnete", "Nelfess", "Illuvieme", "Thete", "Lovara", "Thoilmeer", "Broffton", "Geithele", "Raldymer", "Proseer", "Norteline", "Ordaine", "Finearte", "Oylne-fjonear", "Fewmdo", "Ifrexelle", "Ovle-iyre", "Nirtorthe", "Xirteafe", "Oerxelse", "Deifawt", "Ulkesses", "Axolque", "Orxeria", "Artike", "Osdmele", "Norsteinse", "Tharmfe", "Feano", "Fernetty", "Fainetticut", "Hardonalo", "Netrei", "Galerde", "Sekkeren Pire", "Elvabriss", "Vitagara", "Ortpetia", "Roitheme", "Crotanen", "Polreine", "Ortmessable", "Houghtre", "Fve", "Tyrthomerte", "Syloriunte", "Lornarte", "Thaloreal", "Thirlomerte", "Mhernor", "Monrich-ard", "Thelonce", "Nornlat", "Veirne", "Hansenque", "Relenton", "Premlonert", "Mortfoid", "Nordscanse", "Oroile", "O'lorte", "Breatord", "Shike", "Pirtonthire", "Neultra", "Therollow", "Ruitneur", "Dranporte", "Airse", "Stenslind", "Thirke", "Lohia", "Rootells", "Cenke", "Amaliarte", "Oue", "fekinale", "Abraile", "Opernei", "Perianke", "Penyerre", "Bercoine", "Tuitia", "Waunfythe", "Garwilghen", "Ascenmile", "Rephesce", "Arinleen", "Hurleken", "Fejrolaka", "Gerseinrr", "Foryele", "Murteforle", "Ofrelaina", "Sarlefce", "Olrafeit", "Oltaneito", "Ofantume", "Chaserlume", "Forleto", "Orteleranto", "fmeantino", "Sen-fnero", "fmerlainne", "Foryue", "Athlirsche", "Nirchelm", "Serrown", "Porsenke", "Beraillyte", "Berlue", "Souillre", "Airlle", "Sinellre", "Oixserge", "Fixeralence", "Fovne", "Uie", "Yorle", "Yueslyme", "Ukremance", "Sawncye", "Frouthe", "Tharkesce", "Leriquene", "Pressilvec", "Ormenfjue", "Quentiscular", "Centreille", "San Almeigo", "Ourte Huire", "Roothuire", "Toitearo", "Neimulia", "Oyscelene", "Descentre", "Collyede", "Sighetfe", "Appranchence", "Conferioght", "Scenece", "Dytemesci", "Mboevill", "Mefoughse", "Tenerile", "Olhawse", "Orsebyanue", "Fizzlaire", "Udstenime", "Cdece", "Fjatueneer", "Ufjne", "Nghtenr", "Aghne", "Amtefe", "Kje", "Chamarthue", "Fde", "Fghe", "Pmeghllve", "Hjolense", "Kloeffe", "Kezrtge", "Cfeghte", "Jvefdaue", "Bvenke", "Tonicfce", "Sunrealthe", "Hrewouldse", "Fewelr", "Useinsche", "Clongthle", "Gekrveer", "Hirluence", "Hwensphere", "Hwenlte", "Thwe", "Pilewghte", "Soufregte", "Tmeag", "Ofhsiemnt", "Figxetsche", "Amdesionile", "Oughsce", "San Oytsche", "Throughsce", "Pverteinsce", "Cmuenjsche", "Klheasge", "Gfvoue", "Pjue", "Pjoslte", "Bfeuejr", "Dcetvte", "Amidwle", "Orteimen", "San Obreught", "Fegtmes", "Fjuetmne", "Qirtoye", "Golicue", "Esjadneer", "Svelnaire", "Cvelfen", "Cevilaire", "Svelne", "Sarjune", "Sersionade", "Reispadnort", "Pjrte", "Csuellte", "Ujfeer", "Cveghte", "Sceglairence", "Cuellmne", "Fjuellsce", "Resllghte", "fllghre", "Ofllsce", "Gerntei", "Pretharfe", "Astharte", "Yurfe", "Plouex", "Weaquef", "Hoitealor", "Vorghllsce", "Wroufsce", "Thaqorl", "Gerntsce", "Threwlde", "Hke", "Ufwe", "Oghfesce", "Cdcoulde", "Norpsce", "Pelvollisce", "Pelvo", "Pelvor", "Peljetce", "Marshallcide", "Jeduesche", "Pullitcve", "Vangausche", "Vanollsche", "Pelzo", "Veugllsche", "Herrari", "San Guelue", "Arsinuele", "Fnerdience", "Fleriancide", "Temnge", "Celghede", "Umteschaille", "Norsoogle", "Van Dalme", "Oolem Ranksess", "Aristerse", "Puemince", "Wimsbighle", "Tefelghoisce", "Ule", "Wyomarly", "Plumteme", "Nifptence", "Righente", "Cenoujfe", "Fejneelkoie", "Cruwfe", "Juischlem", "Juilyme", "Ofxue", "Ostfone", "Fjootene-holm", "Tallghecloria", "Breughsce", "Garriuxle", "Feghrrugia", "furwedhie", "San Klaie", "Nightue", "Sxetghce", "Fujxlle", "Fuxhlle", "Nywertho", "Thanhe Captile", "trewshce", "Kitghme", "Rigemalte", "Intghoune", "Hidelgo", "Vulinrence", "Uwernalche", "Huefo", "Renoufe", "Cirtemelger", "Retscher", "Veffte", "Fealmse", "Olhatscheer", "Ulto", "Mexioufe", "Suetle", "Suprioufe", "Tojeathe", "Senelvauche", "Ciellorco", "Huejrrte", "Figerclome", "Axllonce", "North Ohfe", "Affemfo", "Apuilvea", "Alhetre", "Fierwhue", "Ulormfe", "Maporluren", "Vuellne", "Moralevai", "Halebvai", "Hulvuagheir", "Ufapoo", "Teorlade", "Miernor", "Uflinquialar", "Theloscetle", "Redeoxite", "Omrenscide", "Orexiaver", "Unorloufe", "Heroilt", "Alreageran", "Frleporloxie", "Allinexiello", "Dileperio", "Venifeer", "Dietager", "Cigertela", "Ulerneer", "Unathren", "Fronfe", "Prauwhe", "Tinnireus", "Leopene", "Ortenosi", "Venefais", "Scollote", "Brenfoithe", "Beinfessethe", "Cotlleme", "Pertolone", "Esceille", "Deirenbe", "Jueleino", "Orko jeneuf", "Pollese", "Senfoir", "Nouloveir", "Tidenfe", "Pevelko", "Peivenof", "Ceyvune", "Narrve-loif", "Nolveir", "Poirlemeb", "Jorheloit", "Mourbelaire", "Hyroifete", "Geroife", "Aufjeire", "Los Quialare", "Shaumllaire", "Weldithep", "Perthoulde", "Pirthywse", "Peersinth", "Oparheltein", "Eivensbeurg", "Ighexiuera", "Umexiento", "Pilche", "Moamghens", "Mywhe", "Euphitle", "Alaitorde", "Throimelvers", "Teporlice", "Saporian Ulestle", "Threghen", "Ciorllece", "Fenthaire", "Aufgercier", "Aurfecior", "Ayroide", "Loiguerre", "Berthaine", "Berretaine", "Bethoirre", "Neporio", "Fonoicuell", "Norreir", "Hulvuar", "Gelteinscy", "Cirfoutscher", "Opaucirfe", "Foughrile", "Benaucki", "Moirgolve", "Polmuirse", "Gazzeinigui", "Hinse Cliqeu", "Blaugreine", "Vuivelly", "Moullvior", "Sounvior", "Kiorlyfarde", "Moirshyllte", "Aéboide", "Forvillepoi", "Nortiorpillse", "Pillenfeuther", "Faudgherr", "Sevlliuy", "Aéthetoi Baurne", "Worfuer", "Pynthior", "Bernauc", "Wheyerton", "Murndepor", "Tiuinfor", "Celiferoi", "Olfpier", "Baulcetshe", "Assisier", "Anfeloiperi", "Péarrior", "Ristgelche", "Esclow", "Deldeiry", "Deujoir", "Voillelide", "Feivetonde", "Vavirfe", "Ciordeughen", "Ciortue", "Suirssy", "Saugustior", "Tallascior", "Helofuix", "Noirland", "Norlethyne", "Northlyeir", "Genevafe", "Sevmoide", "Mircedeus", "Velzeir", "Velgine", "Vellsig", "Vellnifve", "Falgoi", "Malgoitedi", "Algotemoi", "Wyweirlen", "Cleirde Suine", "Arnautife", "Galirde", "Filerde", "Fouirde", "Beteirve", "Baunyer", "Nevbiu", "Almysium", "Duirkenque", "Palto Meuter", "Desselve", "Yordvior"];
+
+    const prefixes = ['San', 'New', 'Old', 'Fort', 'Mount', 'Port', 'Lake', 'North', 'South', 'East', 'West', 'O\'', 'Van', 'Los'];
+
+    let savedNamesArray = [];
+
+    function generateUniqueName() {
+        const syllables = names.flatMap(name => name.match(/[aeiou][^aeiou]|[^aeiou][aeiou]|[^aeiou][^aeiou]|[aeiou]/gi) || []);
+        const length = Math.floor(Math.random() * 3) + 2; // 2 to 4 syllables
+        let newName = '';
+        for (let i = 0; i < length; i++) {
+            newName += syllables[Math.floor(Math.random() * syllables.length)];
+        }
+        return newName.charAt(0).toUpperCase() + newName.slice(1).toLowerCase();
+    }
+
+    function generateName(type) {
+        const randomUniqueName = () => generateUniqueName();
+        
+        switch(type) {
+            case 'two-part':
+                return `${randomUniqueName()} ${randomUniqueName()}`;
+            case 'short':
+                return randomUniqueName().slice(0, 5);
+            case 'long':
+                return `${prefixes[Math.floor(Math.random() * prefixes.length)]} ${randomUniqueName()}${Math.random() > 0.5 ? ' ' + randomUniqueName() : ''}`;
+            default:
+                return randomUniqueName();
+        }
+    }
+
+    const generateBtn = document.getElementById('generate-btn');
+    const nameInputs = document.querySelectorAll('.name-input');
+    const optionBtns = document.querySelectorAll('.option-btn');
+    const savedCount = document.getElementById('saved-count');
+    const viewSavedBtn = document.getElementById('view-saved-btn');
+    const modal = document.getElementById('saved-names-modal');
+    const closeBtn = document.querySelector('.close');
+    const savedNamesText = document.getElementById('saved-names-text');
+    const updateSavedNamesBtn = document.getElementById('update-saved-names');
+
+    let currentType = 'normal';
+    let savedNames = 0;
+
+    optionBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            optionBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentType = btn.dataset.type;
+        });
+    });
+
+    generateBtn.addEventListener('click', () => {
+        nameInputs.forEach(input => {
+            input.value = generateName(currentType);
+            input.readOnly = false;
+        });
+    });
+
+    document.querySelectorAll('.save-btn').forEach((btn, index) => {
+        btn.addEventListener('click', () => {
+            const input = nameInputs[index];
+            if (input.value.trim() !== '') {
+                savedNamesArray.push(input.value.trim());
+                savedNames++;
+                savedCount.textContent = `Saved Names: ${savedNames}`;
+                input.readOnly = true;
+            }
+        });
+    });
+
+    viewSavedBtn.addEventListener('click', () => {
+        savedNamesText.value = savedNamesArray.join(', ');
+        modal.style.display = 'block';
+    });
+
+    closeBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+
+    updateSavedNamesBtn.addEventListener('click', () => {
+        const updatedNames = savedNamesText.value.split(',').map(name => name.trim()).filter(name => name !== '');
+        savedNamesArray = updatedNames;
+        savedNames = savedNamesArray.length;
+        savedCount.textContent = `Saved Names: ${savedNames}`;
+        modal.style.display = 'none';
+    });
+
+    // Generate names on page load
+    nameInputs.forEach(input => {
+        input.value = generateName('normal');
+    });
+</script>
+</body>
+</html>
