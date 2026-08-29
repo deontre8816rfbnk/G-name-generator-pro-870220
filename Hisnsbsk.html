@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Place Name Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: #f8f9fa;
+            color: #2d3436;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 32px 20px;
+            transition: background-color 0.4s ease;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 28px;
+            padding: 3.5rem 3rem;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.06), 0 10px 25px rgba(0, 0, 0, 0.03);
+            text-align: center;
+            max-width: 680px;
+            width: 100%;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        h1 {
+            margin-bottom: 2.4rem;
+            color: #1a1a1a;
+            font-weight: 600;
+            font-size: 1.8rem;
+            letter-spacing: -0.5px;
+        }
+
+        .options {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.9rem;
+            margin-bottom: 2.4rem;
+        }
+
+        .option-btn {
+            background-color: #e9ecef;
+            color: #495057;
+            border: none;
+            padding: 0.6rem 1.4rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 9999px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .option-btn:hover {
+            background-color: #dee2e6;
+            transform: translateY(-1px);
+        }
+
+        .option-btn.active {
+            background-color: #343a40;
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(52, 58, 64, 0.22);
+        }
+
+        .name-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.4rem;
+            margin-bottom: 2.8rem;
+        }
+
+        .name-box {
+            background-color: #f8f9fa;
+            border-radius: 16px;
+            padding: 1.7rem 1.3rem;
+            position: relative;
+            transition: all 0.3s ease;
+            border: 1px solid #f1f3f5;
+        }
+
+        .name-box:hover {
+            background-color: #f1f3f5;
+            border-color: #e9ecef;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        .name-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: #212529;
+            font-size: 1.15rem;
+            font-weight: 500;
+            text-align: center;
+            outline: none;
+            letter-spacing: 0.3px;
+        }
+
+        .save-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #495057;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .name-box:hover .save-btn {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .save-btn:hover {
+            background-color: #212529;
+        }
+
+        .buttons-row {
+            display: flex;
+            justify-content: center;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        #generate-btn,
+        #view-saved-btn {
+            border: none;
+            padding: 1rem 2.2rem;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 9999px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            min-width: 180px;
+        }
+
+        #generate-btn {
+            background-color: #212529;
+            color: #ffffff;
+        }
+
+        #generate-btn:hover {
+            background-color: #000000;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+        }
+
+        #view-saved-btn {
+            background-color: #e9ecef;
+            color: #343a40;
+        }
+
+        #view-saved-btn:hover {
+            background-color: #dee2e6;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        #saved-count {
+            position: fixed;
+            bottom: 28px;
+            left: 28px;
+            font-size: 0.9rem;
+            color: #6c757d;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.92);
+            padding: 8px 16px;
+            border-radius: 9999px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+            backdrop-filter: blur(4px);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.28);
+            backdrop-filter: blur(6px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            margin: 5% auto;
+            padding: 44px 44px 36px;
+            border-radius: 24px;
+            width: 92%;
+            max-width: 740px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.12);
+            animation: slideUp 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .close {
+            color: #adb5bd;
+            float: right;
+            font-size: 34px;
+            font-weight: 300;
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.2s;
+            margin-top: -10px;
+        }
+
+        .close:hover {
+            color: #212529;
+        }
+
+        #saved-names-text {
+            width: 100%;
+            min-height: 240px;
+            background-color: #fafafa;
+            color: #212529;
+            border: 1px solid #eee;
+            border-radius: 16px;
+            padding: 22px;
+            font-family: inherit;
+            font-size: 1.05rem;
+            line-height: 1.65;
+            resize: vertical;
+            margin: 22px 0 28px;
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+
+        #saved-names-text:focus {
+            outline: none;
+            border-color: #ced4da;
+            background-color: #ffffff;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 14px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+
+        #update-saved-names,
+        #copy-saved-names {
+            border: none;
+            padding: 0.85rem 1.9rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        #update-saved-names {
+            background-color: #212529;
+            color: white;
+        }
+
+        #update-saved-names:hover {
+            background-color: #000;
+            transform: translateY(-1px);
+        }
+
+        #copy-saved-names {
+            background-color: #e9ecef;
+            color: #343a40;
+        }
+
+        #copy-saved-names:hover {
+            background-color: #dee2e6;
+            transform: translateY(-1px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            body {
+                padding: 20px 14px;
+            }
+
+            .container {
+                padding: 2.4rem 1.6rem;
+                border-radius: 22px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+                margin-bottom: 1.8rem;
+            }
+
+            .name-container {
+                grid-template-columns: 1fr;
+                gap: 1.1rem;
+                margin-bottom: 2.2rem;
+            }
+
+            .buttons-row {
+                gap: 0.9rem;
+            }
+
+            #generate-btn,
+            #view-saved-btn {
+                min-width: 0;
+                flex: 1;
+                padding: 0.9rem 1.2rem;
+                font-size: 0.98rem;
+            }
+
+            .modal-content {
+                margin: 8% auto;
+                padding: 28px 22px 24px;
+                width: 94%;
+            }
+
+            #saved-names-text {
+                min-height: 180px;
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Advanced Place Name Generator</h1>
+
+        <div class="options">
+            <button class="option-btn active" data-type="normal">Normal</button>
+            <button class="option-btn" data-type="two-part">Two-Part</button>
+            <button class="option-btn" data-type="short">Short</button>
+            <button class="option-btn" data-type="long">Long</button>
+        </div>
+
+        <div class="name-container">
+            <div class="name-box">
+                <input type="text" class="name-input" readonly>
+                <button class="save-btn">✓</button>
+            </div>
+            <div class="name-box">
+                <input type="text" class="name-input" readonly>
+                <button class="save-btn">✓</button>
+            </div>
+            <div class="name-box">
+                <input type="text" class="name-input" readonly>
+                <button class="save-btn">✓</button>
+            </div>
+            <div class="name-box">
+                <input type="text" class="name-input" readonly>
+                <button class="save-btn">✓</button>
+            </div>
+        </div>
+
+        <div class="buttons-row">
+            <button id="generate-btn">Generate Names</button>
+            <button id="view-saved-btn">View Saved Names</button>
+        </div>
+    </div>
+
+    <div id="saved-count">Saved Names: 0</div>
+
+    <div id="saved-names-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 style="margin: 0 0 4px 0; font-size: 1.5rem; font-weight: 600; color: #1a1a1a;">Saved Names</h2>
+            <textarea id="saved-names-text"></textarea>
+            <div class="modal-actions">
+                <button id="copy-saved-names">Copy</button>
+                <button id="update-saved-names">Update List</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Expanded creative syllable pools for richer, more inspiring names
+        const prefixes = [
+            "Ael", "Aer", "Al", "An", "Ar", "Ash", "Bel", "Bri", "Cael", "Cal", "Cel", "Cor", "Dael", "Dar", "Del",
+            "Eld", "El", "Ely", "Fael", "Fen", "Gal", "Gwen", "Hal", "Ith", "Kael", "Kel", "Lor", "Lyn", "Mal",
+            "Mir", "Mor", "Nal", "Ner", "Or", "Quel", "Rav", "Rey", "Sar", "Sel", "Syl", "Thal", "Thor", "Val",
+            "Vel", "Vor", "Wyn", "Xan", "Yel", "Zan", "Zha"
+        ];
+
+        const middles = [
+            "an", "ar", "en", "er", "ia", "iel", "in", "ion", "ir", "is", "ith", "or", "oth", "ul", "un", "ur",
+            "yn", "ys", "ae", "ei", "ai", "oa", "ua", "dra", "drae", "lith", "mir", "nor", "riel", "ther", "vyn"
+        ];
+
+        const suffixes = [
+            "a", "ae", "an", "ar", "ath", "en", "er", "ia", "iel", "in", "ion", "is", "ith", "or", "os", "oth",
+            "ul", "um", "us", "yn", "ys", "ara", "aria", "elle", "ora", "oria", "wyn", "eth", "iel", "ith",
+            "wood", "haven", "mere", "fell", "ridge", "vale", "moor", "crest", "spire", "reach", "hold"
+        ];
+
+        const natureWords = [
+            "Ash", "Birch", "Cedar", "Elder", "Fern", "Frost", "Glen", "Hawk", "Iron", "Jade", "Lake", "Mist",
+            "Oak", "Pine", "River", "Shadow", "Silver", "Stone", "Storm", "Thorn", "Willow", "Wolf", "Moon",
+            "Star", "Sun", "Sky", "Cloud", "Rain", "Snow", "Wind", "Fire", "Ember", "Crystal", "Amber"
+        ];
+
+        const darkWords = [
+            "Black", "Bleak", "Blood", "Bone", "Dark", "Dread", "Gloom", "Grim", "Hollow", "Night", "Raven",
+            "Shade", "Sorrow", "Thorn", "Void", "Wraith", "Grave", "Crypt", "Doom", "Fell"
+        ];
+
+        const elegantWords = [
+            "Aether", "Azure", "Celestia", "Elysia", "Lumina", "Seraph", "Solara", "Vespera", "Aurora",
+            "Celene", "Elara", "Lyra", "Nova", "Orion", "Sable", "Silva", "Vera", "Zara"
+        ];
+
+        let savedNamesArray = [];
+        let currentType = 'normal';
+
+        function randomFrom(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        function generateUniqueName() {
+            const style = Math.random();
+
+            // Style 1: Classic fantasy
+            if (style < 0.35) {
+                return randomFrom(prefixes) + randomFrom(middles) + randomFrom(suffixes);
+            }
+            // Style 2: Nature-inspired
+            else if (style < 0.55) {
+                return randomFrom(natureWords) + randomFrom(suffixes);
+            }
+            // Style 3: Dark / mysterious
+            else if (style < 0.70) {
+                return randomFrom(darkWords) + randomFrom(middles) + randomFrom(["a", "e", "ia", "is", "or", "yn"]);
+            }
+            // Style 4: Elegant / ethereal
+            else if (style < 0.85) {
+                return randomFrom(elegantWords);
+            }
+            // Style 5: Experimental invented
+            else {
+                return randomFrom(prefixes) + randomFrom(middles) + randomFrom(middles).slice(0, 2) + randomFrom(suffixes);
+            }
+        }
+
+        function generateName(type) {
+            switch (type) {
+                case 'two-part':
+                    return `${generateUniqueName()} ${generateUniqueName()}`;
+                case 'short':
+                    let short = generateUniqueName();
+                    return short.length > 6 ? short.slice(0, 6) : short;
+                case 'long':
+                    const longPrefixes = ["New", "Old", "Great", "High", "Deep", "Far", "North", "South", "East", "West", "Upper", "Lower"];
+                    return `${randomFrom(longPrefixes)} ${generateUniqueName()}${Math.random() > 0.6 ? ' ' + generateUniqueName() : ''}`;
+                default:
+                    return generateUniqueName();
+            }
+        }
+
+        // DOM elements
+        const generateBtn = document.getElementById('generate-btn');
+        const nameInputs = document.querySelectorAll('.name-input');
+        const optionBtns = document.querySelectorAll('.option-btn');
+        const savedCount = document.getElementById('saved-count');
+        const viewSavedBtn = document.getElementById('view-saved-btn');
+        const modal = document.getElementById('saved-names-modal');
+        const closeBtn = document.querySelector('.close');
+        const savedNamesText = document.getElementById('saved-names-text');
+        const updateSavedNamesBtn = document.getElementById('update-saved-names');
+        const copySavedNamesBtn = document.getElementById('copy-saved-names');
+
+        // Option buttons
+        optionBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                optionBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentType = btn.dataset.type;
+            });
+        });
+
+        // Generate
+        generateBtn.addEventListener('click', () => {
+            nameInputs.forEach(input => {
+                input.value = generateName(currentType);
+                input.readOnly = false;
+            });
+        });
+
+        // Save buttons
+        document.querySelectorAll('.save-btn').forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                const input = nameInputs[index];
+                if (input.value.trim() !== '') {
+                    savedNamesArray.push(input.value.trim());
+                    savedCount.textContent = `Saved Names: ${savedNamesArray.length}`;
+                    input.readOnly = true;
+                }
+            });
+        });
+
+        // View saved
+        viewSavedBtn.addEventListener('click', () => {
+            savedNamesText.value = savedNamesArray.join(', ');
+            modal.style.display = 'block';
+        });
+
+        // Close modal
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // Update list
+        updateSavedNamesBtn.addEventListener('click', () => {
+            const updatedNames = savedNamesText.value.split(',').map(n => n.trim()).filter(n => n !== '');
+            savedNamesArray = updatedNames;
+            savedCount.textContent = `Saved Names: ${savedNamesArray.length}`;
+            modal.style.display = 'none';
+        });
+
+        // Copy to clipboard
+        copySavedNamesBtn.addEventListener('click', async () => {
+            const text = savedNamesText.value;
+            if (!text.trim()) return;
+
+            try {
+                await navigator.clipboard.writeText(text);
+                copySavedNamesBtn.textContent = "Copied!";
+                setTimeout(() => {
+                    copySavedNamesBtn.textContent = "Copy";
+                }, 1800);
+            } catch (err) {
+                // Fallback
+                savedNamesText.select();
+                document.execCommand('copy');
+                copySavedNamesBtn.textContent = "Copied!";
+                setTimeout(() => {
+                    copySavedNamesBtn.textContent = "Copy";
+                }, 1800);
+            }
+        });
+
+        // Generate initial names
+        nameInputs.forEach(input => {
+            input.value = generateName('normal');
+        });
+    </script>
+</body>
+</html>
