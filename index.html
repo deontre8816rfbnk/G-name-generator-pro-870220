@@ -17,83 +17,43 @@
             color: #2d3436;
             min-height: 100vh;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            padding: 32px 20px;
-            transition: background-color 0.4s ease;
-        }
-
-        .container {
-            background-color: #ffffff;
-            border-radius: 28px;
-            padding: 3.5rem 3rem;
-            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.06), 0 10px 25px rgba(0, 0, 0, 0.03);
-            text-align: center;
-            max-width: 680px;
-            width: 100%;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            justify-content: center;
+            padding: 40px 20px;
         }
 
         h1 {
-            margin-bottom: 2.4rem;
+            margin-bottom: 2.8rem;
             color: #1a1a1a;
             font-weight: 600;
-            font-size: 1.8rem;
+            font-size: 1.75rem;
             letter-spacing: -0.5px;
-        }
-
-        .options {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 0.9rem;
-            margin-bottom: 2.4rem;
-        }
-
-        .option-btn {
-            background-color: #e9ecef;
-            color: #495057;
-            border: none;
-            padding: 0.6rem 1.4rem;
-            font-size: 0.95rem;
-            font-weight: 500;
-            cursor: pointer;
-            border-radius: 9999px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .option-btn:hover {
-            background-color: #dee2e6;
-            transform: translateY(-1px);
-        }
-
-        .option-btn.active {
-            background-color: #343a40;
-            color: #ffffff;
-            box-shadow: 0 4px 14px rgba(52, 58, 64, 0.22);
+            text-align: center;
         }
 
         .name-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1.4rem;
-            margin-bottom: 2.8rem;
+            gap: 1rem;
+            width: 100%;
+            max-width: 480px;
+            margin-bottom: 3rem;
         }
 
         .name-box {
-            background-color: #f8f9fa;
-            border-radius: 16px;
-            padding: 1.7rem 1.3rem;
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 1.15rem 0.9rem;
             position: relative;
-            transition: all 0.3s ease;
-            border: 1px solid #f1f3f5;
+            transition: all 0.25s ease;
+            border: 1px solid #e9ecef;
+            cursor: text;
         }
 
         .name-box:hover {
-            background-color: #f1f3f5;
-            border-color: #e9ecef;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            border-color: #ced4da;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
         }
 
         .name-input {
@@ -101,31 +61,32 @@
             background: transparent;
             border: none;
             color: #212529;
-            font-size: 1.15rem;
+            font-size: 1.05rem;
             font-weight: 500;
             text-align: center;
             outline: none;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.2px;
+            cursor: text;
         }
 
         .save-btn {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 7px;
+            right: 7px;
             background-color: #495057;
             color: white;
             border: none;
             border-radius: 50%;
-            width: 28px;
-            height: 28px;
-            font-size: 14px;
+            width: 24px;
+            height: 24px;
+            font-size: 12px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             opacity: 0;
             transform: scale(0.8);
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s ease;
         }
 
         .name-box:hover .save-btn {
@@ -137,23 +98,61 @@
             background-color: #212529;
         }
 
+        .bottom-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.1rem;
+            width: 100%;
+            max-width: 480px;
+        }
+
+        .options {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+        }
+
+        .option-btn {
+            background-color: #e9ecef;
+            color: #495057;
+            border: none;
+            padding: 0.4rem 0.95rem;
+            font-size: 0.82rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 9999px;
+            transition: all 0.25s ease;
+        }
+
+        .option-btn:hover {
+            background-color: #dee2e6;
+        }
+
+        .option-btn.active {
+            background-color: #343a40;
+            color: #ffffff;
+        }
+
         .buttons-row {
             display: flex;
             justify-content: center;
-            gap: 1.2rem;
-            flex-wrap: wrap;
+            gap: 0.9rem;
+            width: 100%;
         }
 
         #generate-btn,
         #view-saved-btn {
             border: none;
-            padding: 1rem 2.2rem;
-            font-size: 1.05rem;
+            padding: 0.85rem 1.6rem;
+            font-size: 0.95rem;
             font-weight: 600;
             cursor: pointer;
             border-radius: 9999px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            min-width: 180px;
+            transition: all 0.25s ease;
+            flex: 1;
+            max-width: 200px;
         }
 
         #generate-btn {
@@ -163,8 +162,7 @@
 
         #generate-btn:hover {
             background-color: #000000;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+            transform: translateY(-1px);
         }
 
         #view-saved-btn {
@@ -174,22 +172,20 @@
 
         #view-saved-btn:hover {
             background-color: #dee2e6;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transform: translateY(-1px);
         }
 
         #saved-count {
             position: fixed;
-            bottom: 28px;
-            left: 28px;
-            font-size: 0.9rem;
+            bottom: 24px;
+            left: 24px;
+            font-size: 0.85rem;
             color: #6c757d;
             font-weight: 500;
-            background: rgba(255, 255, 255, 0.92);
-            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 6px 14px;
             border-radius: 9999px;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
-            backdrop-filter: blur(4px);
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
         }
 
         /* Modal */
@@ -203,29 +199,29 @@
             height: 100%;
             background-color: rgba(0, 0, 0, 0.28);
             backdrop-filter: blur(6px);
-            animation: fadeIn 0.3s ease;
+            animation: fadeIn 0.25s ease;
         }
 
         .modal-content {
             background-color: #ffffff;
             margin: 5% auto;
-            padding: 44px 44px 36px;
-            border-radius: 24px;
+            padding: 40px;
+            border-radius: 20px;
             width: 92%;
-            max-width: 740px;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.12);
-            animation: slideUp 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            max-width: 720px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12);
+            animation: slideUp 0.3s ease;
         }
 
         .close {
             color: #adb5bd;
             float: right;
-            font-size: 34px;
+            font-size: 32px;
             font-weight: 300;
             cursor: pointer;
             line-height: 1;
             transition: color 0.2s;
-            margin-top: -10px;
+            margin-top: -8px;
         }
 
         .close:hover {
@@ -234,18 +230,17 @@
 
         #saved-names-text {
             width: 100%;
-            min-height: 240px;
+            min-height: 230px;
             background-color: #fafafa;
             color: #212529;
             border: 1px solid #eee;
-            border-radius: 16px;
-            padding: 22px;
+            border-radius: 14px;
+            padding: 20px;
             font-family: inherit;
-            font-size: 1.05rem;
-            line-height: 1.65;
+            font-size: 1.02rem;
+            line-height: 1.6;
             resize: vertical;
-            margin: 22px 0 28px;
-            transition: border-color 0.2s, background-color 0.2s;
+            margin: 18px 0 24px;
         }
 
         #saved-names-text:focus {
@@ -256,7 +251,7 @@
 
         .modal-actions {
             display: flex;
-            gap: 14px;
+            gap: 12px;
             justify-content: flex-end;
             flex-wrap: wrap;
         }
@@ -264,12 +259,12 @@
         #update-saved-names,
         #copy-saved-names {
             border: none;
-            padding: 0.85rem 1.9rem;
-            font-size: 1rem;
+            padding: 0.75rem 1.7rem;
+            font-size: 0.95rem;
             font-weight: 600;
             border-radius: 9999px;
             cursor: pointer;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
         }
 
         #update-saved-names {
@@ -279,7 +274,6 @@
 
         #update-saved-names:hover {
             background-color: #000;
-            transform: translateY(-1px);
         }
 
         #copy-saved-names {
@@ -289,7 +283,6 @@
 
         #copy-saved-names:hover {
             background-color: #dee2e6;
-            transform: translateY(-1px);
         }
 
         @keyframes fadeIn {
@@ -298,85 +291,75 @@
         }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Responsive */
-        @media (max-width: 600px) {
+        @media (max-width: 520px) {
             body {
-                padding: 20px 14px;
-            }
-
-            .container {
-                padding: 2.4rem 1.6rem;
-                border-radius: 22px;
+                padding: 28px 16px;
             }
 
             h1 {
-                font-size: 1.5rem;
-                margin-bottom: 1.8rem;
+                font-size: 1.45rem;
+                margin-bottom: 2rem;
             }
 
             .name-container {
-                grid-template-columns: 1fr;
-                gap: 1.1rem;
-                margin-bottom: 2.2rem;
+                max-width: 100%;
+                gap: 0.85rem;
+            }
+
+            .name-box {
+                padding: 1rem 0.75rem;
             }
 
             .buttons-row {
-                gap: 0.9rem;
+                gap: 0.7rem;
             }
 
             #generate-btn,
             #view-saved-btn {
-                min-width: 0;
-                flex: 1;
-                padding: 0.9rem 1.2rem;
-                font-size: 0.98rem;
+                padding: 0.8rem 1rem;
+                font-size: 0.9rem;
             }
 
             .modal-content {
+                padding: 28px 20px;
                 margin: 8% auto;
-                padding: 28px 22px 24px;
-                width: 94%;
-            }
-
-            #saved-names-text {
-                min-height: 180px;
-                padding: 16px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Advanced Place Name Generator</h1>
 
+    <h1>Advanced Place Name Generator</h1>
+
+    <div class="name-container">
+        <div class="name-box">
+            <input type="text" class="name-input">
+            <button class="save-btn">✓</button>
+        </div>
+        <div class="name-box">
+            <input type="text" class="name-input">
+            <button class="save-btn">✓</button>
+        </div>
+        <div class="name-box">
+            <input type="text" class="name-input">
+            <button class="save-btn">✓</button>
+        </div>
+        <div class="name-box">
+            <input type="text" class="name-input">
+            <button class="save-btn">✓</button>
+        </div>
+    </div>
+
+    <div class="bottom-controls">
         <div class="options">
             <button class="option-btn active" data-type="normal">Normal</button>
             <button class="option-btn" data-type="two-part">Two-Part</button>
             <button class="option-btn" data-type="short">Short</button>
             <button class="option-btn" data-type="long">Long</button>
-        </div>
-
-        <div class="name-container">
-            <div class="name-box">
-                <input type="text" class="name-input" readonly>
-                <button class="save-btn">✓</button>
-            </div>
-            <div class="name-box">
-                <input type="text" class="name-input" readonly>
-                <button class="save-btn">✓</button>
-            </div>
-            <div class="name-box">
-                <input type="text" class="name-input" readonly>
-                <button class="save-btn">✓</button>
-            </div>
-            <div class="name-box">
-                <input type="text" class="name-input" readonly>
-                <button class="save-btn">✓</button>
-            </div>
         </div>
 
         <div class="buttons-row">
@@ -390,7 +373,7 @@
     <div id="saved-names-modal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2 style="margin: 0 0 4px 0; font-size: 1.5rem; font-weight: 600; color: #1a1a1a;">Saved Names</h2>
+            <h2 style="margin: 0 0 4px 0; font-size: 1.4rem; font-weight: 600; color: #1a1a1a;">Saved Names</h2>
             <textarea id="saved-names-text"></textarea>
             <div class="modal-actions">
                 <button id="copy-saved-names">Copy</button>
@@ -400,7 +383,6 @@
     </div>
 
     <script>
-        // Expanded creative syllable pools for richer, more inspiring names
         const prefixes = [
             "Ael", "Aer", "Al", "An", "Ar", "Ash", "Bel", "Bri", "Cael", "Cal", "Cel", "Cor", "Dael", "Dar", "Del",
             "Eld", "El", "Ely", "Fael", "Fen", "Gal", "Gwen", "Hal", "Ith", "Kael", "Kel", "Lor", "Lyn", "Mal",
@@ -445,24 +427,15 @@
         function generateUniqueName() {
             const style = Math.random();
 
-            // Style 1: Classic fantasy
             if (style < 0.35) {
                 return randomFrom(prefixes) + randomFrom(middles) + randomFrom(suffixes);
-            }
-            // Style 2: Nature-inspired
-            else if (style < 0.55) {
+            } else if (style < 0.55) {
                 return randomFrom(natureWords) + randomFrom(suffixes);
-            }
-            // Style 3: Dark / mysterious
-            else if (style < 0.70) {
+            } else if (style < 0.70) {
                 return randomFrom(darkWords) + randomFrom(middles) + randomFrom(["a", "e", "ia", "is", "or", "yn"]);
-            }
-            // Style 4: Elegant / ethereal
-            else if (style < 0.85) {
+            } else if (style < 0.85) {
                 return randomFrom(elegantWords);
-            }
-            // Style 5: Experimental invented
-            else {
+            } else {
                 return randomFrom(prefixes) + randomFrom(middles) + randomFrom(middles).slice(0, 2) + randomFrom(suffixes);
             }
         }
@@ -482,7 +455,6 @@
             }
         }
 
-        // DOM elements
         const generateBtn = document.getElementById('generate-btn');
         const nameInputs = document.querySelectorAll('.name-input');
         const optionBtns = document.querySelectorAll('.option-btn');
@@ -494,7 +466,6 @@
         const updateSavedNamesBtn = document.getElementById('update-saved-names');
         const copySavedNamesBtn = document.getElementById('copy-saved-names');
 
-        // Option buttons
         optionBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 optionBtns.forEach(b => b.classList.remove('active'));
@@ -503,7 +474,6 @@
             });
         });
 
-        // Generate
         generateBtn.addEventListener('click', () => {
             nameInputs.forEach(input => {
                 input.value = generateName(currentType);
@@ -511,25 +481,37 @@
             });
         });
 
-        // Save buttons
         document.querySelectorAll('.save-btn').forEach((btn, index) => {
-            btn.addEventListener('click', () => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
                 const input = nameInputs[index];
                 if (input.value.trim() !== '') {
                     savedNamesArray.push(input.value.trim());
                     savedCount.textContent = `Saved Names: ${savedNamesArray.length}`;
-                    input.readOnly = true;
+                    btn.style.backgroundColor = '#28a745';
+                    setTimeout(() => {
+                        btn.style.backgroundColor = '#495057';
+                    }, 1100);
                 }
             });
         });
 
-        // View saved
+        // Click anywhere on the name box to edit easily
+        document.querySelectorAll('.name-box').forEach((box, index) => {
+            box.addEventListener('click', () => {
+                const input = nameInputs[index];
+                input.readOnly = false;
+                input.focus();
+                const len = input.value.length;
+                input.setSelectionRange(len, len);
+            });
+        });
+
         viewSavedBtn.addEventListener('click', () => {
             savedNamesText.value = savedNamesArray.join(', ');
             modal.style.display = 'block';
         });
 
-        // Close modal
         closeBtn.addEventListener('click', () => {
             modal.style.display = 'none';
         });
@@ -540,7 +522,6 @@
             }
         });
 
-        // Update list
         updateSavedNamesBtn.addEventListener('click', () => {
             const updatedNames = savedNamesText.value.split(',').map(n => n.trim()).filter(n => n !== '');
             savedNamesArray = updatedNames;
@@ -548,7 +529,6 @@
             modal.style.display = 'none';
         });
 
-        // Copy to clipboard
         copySavedNamesBtn.addEventListener('click', async () => {
             const text = savedNamesText.value;
             if (!text.trim()) return;
@@ -558,15 +538,14 @@
                 copySavedNamesBtn.textContent = "Copied!";
                 setTimeout(() => {
                     copySavedNamesBtn.textContent = "Copy";
-                }, 1800);
+                }, 1600);
             } catch (err) {
-                // Fallback
                 savedNamesText.select();
                 document.execCommand('copy');
                 copySavedNamesBtn.textContent = "Copied!";
                 setTimeout(() => {
                     copySavedNamesBtn.textContent = "Copy";
-                }, 1800);
+                }, 1600);
             }
         });
 
